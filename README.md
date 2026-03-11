@@ -1,61 +1,149 @@
-#  Real-Time News Sentiment Classification and Dashboard (PySpark + Streamlit)
+# Real-Time News Sentiment Analytics Dashboard
 
-A real-time news analytics dashboard that fetches live headlines, performs sentiment analysis, and visualizes insights using **Streamlit**, **TextBlob**, and **PySpark-compatible storage (Parquet format)**.
+A real-time news analytics system that collects live news headlines, performs sentiment analysis, and visualizes insights through an interactive dashboard.
 
-This project demonstrates real-time data ingestion, NLP-based sentiment classification, and interactive dashboard visualization — ideal for Data Engineering + NLP portfolio projects.
-
----
-
-##  Project Overview
-
-This system:
-
-- Fetches live news headlines using **NewsAPI**
-- Falls back to **GNews** if NewsAPI fails
-- Performs **sentiment classification** using TextBlob
-- Stores predictions in **Parquet format**
-- Displays:
-  - Latest headlines
-  - Sentiment distribution (Bar Chart)
-  - Positive sentiment trend over time (Line Chart)
+This project demonstrates **real-time data ingestion, NLP-based sentiment classification, scalable data storage, and interactive data visualization**, making it suitable for **Data Analytics, Data Engineering, and NLP portfolios**.
 
 ---
 
-##  Architecture
+# Problem Statement
 
-### Workflow
+Monitoring public sentiment across news sources is challenging because thousands of headlines are published every hour. Manually analyzing these headlines is inefficient and time-consuming.
 
-1. **News Fetching**
-   - NewsAPI (Primary)
-   - GNews (Fallback)
+This project builds a **real-time sentiment analytics system** that automatically collects news headlines, analyzes sentiment using Natural Language Processing (NLP), and visualizes trends through an interactive dashboard.
 
-2. **Sentiment Analysis**
-   - TextBlob polarity score
-   - Positive / Negative classification
-
-3. **Storage**
-   - Predictions stored as `.parquet` files
-   - Enables PySpark scalability
-
-4. **Visualization**
-   - Interactive dashboard using Streamlit
-   - Charts via Plotly
+The system helps analysts quickly understand **public opinion trends across global news sources.**
 
 ---
 
-##  Project Structure
+# Project Overview
+
+The system performs the following tasks:
+
+1. Fetches **live news headlines** from NewsAPI
+2. Uses **GNews as a fallback** if NewsAPI fails
+3. Performs **sentiment classification using TextBlob**
+4. Stores results in **Parquet format (PySpark-compatible)**
+5. Displays insights through a **Streamlit interactive dashboard**
+
+---
+
+# Key Features
+
+* Real-time news headline collection
+* NLP-based sentiment classification
+* Interactive analytics dashboard
+* Sentiment distribution visualization
+* Sentiment trend analysis over time
+* Big data compatible storage using **Parquet**
+
+---
+
+# Data Pipeline Architecture
+
+NewsAPI / GNews
+↓
+Headline Collection
+↓
+Sentiment Analysis (TextBlob NLP)
+↓
+Parquet Storage (PySpark Compatible)
+↓
+Interactive Dashboard (Streamlit + Plotly)
+
+---
+
+# Dashboard Features
+
+## 1. Latest Headlines Table
+
+Displays real-time news headlines with:
+
+* Published date
+* News source
+* Headline text
+* Sentiment label
+* Sentiment probability score
+
+## 2. Sentiment Distribution
+
+A bar chart showing the number of:
+
+* Positive headlines
+* Negative headlines
+
+## 3. Sentiment Trend Over Time
+
+A line chart tracking the **trend of positive sentiment over time**.
+
+This helps identify **changes in public sentiment related to news events**.
+
+---
+
+# Sentiment Classification Logic
+
+Sentiment is determined using **TextBlob polarity scores**.
+
+Polarity > 0 → Positive
+Polarity ≤ 0 → Negative
+
+Example implementation:
+
+```python
+df['sentiment'] = df['title'].apply(
+    lambda t: "Positive" if TextBlob(t).sentiment.polarity > 0 else "Negative"
+)
+```
+
+TextBlob analyzes the emotional tone of each headline and assigns a sentiment label.
+
+---
+
+# Data Storage
+
+All predictions are stored as **Parquet files**, enabling scalable big data processing.
+
+Example storage format:
 
 ```
-📦 real-time-news-sentiment
- ┣  real_time_news_sentiment_classification_and_dashboard_using_pyspark.py
- ┣  requirements.txt
- ┣  predictions_parquet/
- ┗  README.md
+predictions_parquet/pred_<uuid>.parquet
+```
+
+Benefits:
+
+* Efficient columnar storage
+* Compatible with **PySpark and big data pipelines**
+* Enables historical analysis of sentiment trends
+
+---
+
+# Project Structure
+
+```
+real-time-news-sentiment
+│
+├── real_time_news_sentiment_classification_and_dashboard_using_pyspark.py
+├── requirements.txt
+├── predictions_parquet/
+└── README.md
 ```
 
 ---
 
-##  Requirements
+# Technologies Used
+
+Python
+Streamlit
+TextBlob (NLP)
+PySpark-compatible storage (Parquet)
+Plotly (Visualization)
+Pandas (Data Processing)
+NewsAPI
+GNews
+
+---
+
+# Requirements
 
 ```
 streamlit
@@ -67,56 +155,56 @@ pyarrow
 pyspark
 ```
 
----
+Install dependencies:
 
-##  Technologies Used
-
-- Python
-- Streamlit
-- TextBlob (NLP)
-- PySpark (Parquet Storage)
-- Plotly
-- NewsAPI
-- GNews
+```
+pip install -r requirements.txt
+```
 
 ---
 
-##  Setup Instructions
+# Setup Instructions
 
-### 1️. Clone Repository
+## 1. Clone the Repository
 
-```bash
+```
 git clone https://github.com/your-username/real-time-news-sentiment.git
 cd real-time-news-sentiment
 ```
 
-### 2️. Install Dependencies
+---
 
-```bash
+## 2. Install Dependencies
+
+```
 pip install -r requirements.txt
 ```
 
-### 3️. Add NewsAPI Key
+---
+
+## 3. Add NewsAPI Key
 
 Inside the script, replace:
 
-```python
+```
 NEWSAPI_KEY = "YOUR_API_KEY"
 ```
 
-Get your API key from:
+You can obtain a free API key from:
 
 https://newsapi.org/
 
 ---
 
-##  Run the Application
+# Run the Application
 
-```bash
+Start the Streamlit dashboard:
+
+```
 streamlit run real_time_news_sentiment_classification_and_dashboard_using_pyspark.py
 ```
 
-Then open your browser:
+Open in browser:
 
 ```
 http://localhost:8501
@@ -124,94 +212,53 @@ http://localhost:8501
 
 ---
 
-##  Dashboard Features
+# Example Output
 
-###  1. Latest Headlines Table
-
-Displays:
-
-- Published Date
-- Source
-- Headline
-- Sentiment
-- Probability Score
+| publishedAt | source | headline                | sentiment | prob_pos |
+| ----------- | ------ | ----------------------- | --------- | -------- |
+| 2026-03-02  | CNN    | Market hits record high | Positive  | 0.65     |
 
 ---
 
-###  2. Sentiment Distribution
+# Skills Demonstrated
 
-Bar chart showing count of:
-
-- Positive
-- Negative
-
----
-
-###  3. Positive Sentiment Trend
-
-Line chart over time tracking sentiment probability.
+Real-time data ingestion
+Natural Language Processing (NLP)
+Sentiment analysis
+Interactive dashboard development
+Data visualization
+Big data compatible storage
+Data pipeline design
 
 ---
 
-##  Sentiment Logic
+# Future Improvements
 
-```python
-df['sentiment'] = df['title'].apply(
-    lambda t: "Positive" if TextBlob(t).sentiment.polarity > 0 else "Negative"
-)
-```
-
-- Polarity > 0 → Positive  
-- Polarity ≤ 0 → Negative  
-
----
-
-##  Data Storage
-
-Each prediction batch is saved as:
-
-```
-predictions_parquet/pred_<uuid>.parquet
-```
-
-### Benefits
-
-- Big data ready
-- Spark-compatible
-- Historical tracking enabled
-- Easy integration with Spark Structured Streaming
+* Replace TextBlob with **BERT / HuggingFace model**
+* Implement **PySpark Structured Streaming**
+* Add **Kafka streaming ingestion**
+* Add **WordCloud visualization**
+* Add **Neutral sentiment class**
+* Deploy dashboard on **AWS / GCP / Azure**
+* Add **Docker container support**
+* Integrate **PostgreSQL or MongoDB storage**
 
 ---
 
-## 📈 Example Output
+# Use Cases
 
-| publishedAt | source | headline | sentiment | prob_pos |
-|------------|--------|----------|-----------|----------|
-| 2026-03-02 | CNN | Market hits record high | Positive | 0.65 |
-
----
-
-##  Future Improvements
-
-- Replace TextBlob with BERT / HuggingFace model
-- Integrate PySpark Structured Streaming
-- Add Kafka ingestion
-- Add WordCloud visualization
-- Add Neutral sentiment class
-- Deploy on AWS / GCP / Azure
-- Add Docker support
-- Add Database storage (PostgreSQL / MongoDB)
+Media sentiment monitoring
+Financial market sentiment analysis
+Political sentiment tracking
+Real-time news analytics
+NLP portfolio project
+Big Data academic project
 
 ---
 
-##  Use Cases
+# Author
 
-- Media analytics
-- Stock sentiment monitoring
-- Political sentiment tracking
-- Real-time event monitoring
-- NLP + Streaming portfolio project
-- Academic Big Data project
+Rashad
+Data Analyst | Python | Power BI | SQL | PySpark
 
----
-
+GitHub: https://github.com/RASHAD750
